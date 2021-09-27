@@ -7,9 +7,9 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     //Ref
+    [SerializeField] public Animator playerAnimator;
     [SerializeField] private InputManager InputManager;
     [SerializeField] private Transform[] checkPoints;
-    [SerializeField] public Animator playerAnimator;
     [SerializeField] private GameObject levelEndUi;
     [SerializeField] private Transform pointAB;
     [SerializeField] private Transform pointBC;
@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            //playerAnimator.SetBool("isWalking", true);
+            playerAnimator.SetBool("isGameStart", true);
             isGameStart = true;
         }
 
@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isTurning)
         {
-            interpolateAmount = ((interpolateAmount + Time.smoothDeltaTime)) % 1;
+            interpolateAmount = ((interpolateAmount + Time.deltaTime)) % 1;
             pointAB.position = Vector3.Lerp(pointA.position, pointB.position, interpolateAmount);
             pointBC.position = Vector3.Lerp(pointB.position, pointC.position, interpolateAmount);
             transform.position = Vector3.Lerp(pointAB.position, pointBC.position, interpolateAmount);
