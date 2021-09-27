@@ -8,6 +8,7 @@ TagManager:
   - Corner
   - Box
   - Obstacle
+  - GroundObstacle
   layers:
   - Default
   - TransparentFX

@@ -90,13 +90,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isTurning)
         {
-            interpolateAmount = ((interpolateAmount + Time.deltaTime)) % 1;
+            interpolateAmount = (interpolateAmount + Time.deltaTime) % 1f;
             pointAB.position = Vector3.Lerp(pointA.position, pointB.position, interpolateAmount);
             pointBC.position = Vector3.Lerp(pointB.position, pointC.position, interpolateAmount);
             transform.position = Vector3.Lerp(pointAB.position, pointBC.position, interpolateAmount);
             transform.LookAt(pointBC, Vector3.up);
 
-            if (Vector3.Distance(transform.position, pointC.position) < 0.05f)
+            if (Vector3.Distance(transform.position, pointC.position) < 0.08f)
             {
                 if (index < checkPoints.Length - 1) { index++; }
                 interpolateAmount = 0;
