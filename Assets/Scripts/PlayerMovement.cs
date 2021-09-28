@@ -6,13 +6,16 @@ using UnityEngine.SceneManagement;
 [SelectionBase]
 public class PlayerMovement : MonoBehaviour
 {
+    #region Variables
     //Ref
     [SerializeField] public Animator playerAnimator;
     [SerializeField] private InputManager InputManager;
     [SerializeField] private Transform[] checkPoints;
     [SerializeField] private GameObject levelEndUi;
+    [SerializeField] private GameObject gameplayUi;
     [SerializeField] private Transform pointAB;
     [SerializeField] private Transform pointBC;
+    [SerializeField] private Camera secondCamera;
     private Transform inputManagerObj;
     private Transform target;
     private Transform pointA;
@@ -20,22 +23,25 @@ public class PlayerMovement : MonoBehaviour
     private Transform pointC;
 
     //Config
-    [SerializeField] public float speed;
+    public float speed;
     private float interpolateAmount;
     private int index;
 
     //State 
     public bool isGameStart;
-    private bool isLevelEnd;
+    public bool isLevelEnd;
     private bool isTurning;
     private bool isGoing;
+    #endregion
 
+    #region Methods
     private void Start()
     {
         isGoing = true;
         index = 0;
         target = checkPoints[index];
         inputManagerObj = InputManager.gameObject.transform;
+        secondCamera.gameObject.SetActive(false);
     }
     private void Update()
     {
@@ -44,24 +50,29 @@ public class PlayerMovement : MonoBehaviour
             playerAnimator.SetBool("isGameStart", true);
             isGameStart = true;
         }
-
-
         FollowPath();
         TurningHandler();
     }
     private void FollowPath()
     {
+        if (isLevelEnd)
+        {
+            //TODO Level end things below here
+            Destroy(InputManager);
+            playerAnimator.SetBool("isLevelEnd", true);
+            Invoke("ShowLevelEndUi", 1.5f);
+            speed = 0;
+        }
+
         if (isGoing && isGameStart)
         { transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime); }
 
         if (transform.position == target.position && !(index < checkPoints.Length))
         {
-            //TODO Level end things below here
-            // viewerUi.SetActive(false);
+            SetCameraPos();
             isLevelEnd = true;
-            Destroy(InputManager);
-            // Invoke("ShowLevelEndUi", 1f);
         }
+
         else if (transform.position == target.position)
         {
             if (target.CompareTag("Corner"))
@@ -83,7 +94,9 @@ public class PlayerMovement : MonoBehaviour
     }
     private void ShowLevelEndUi()
     {
+
         levelEndUi.SetActive(true);
+        gameplayUi.SetActive(false);
         Destroy(this);
     }
     private void TurningHandler()
@@ -106,4 +119,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    private void SetCameraPos()
+    {
+        secondCamera.gameObject.SetActive(true);
+    }
+    #endregion
 }

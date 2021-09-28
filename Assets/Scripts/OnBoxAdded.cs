@@ -7,8 +7,8 @@ public class OnBoxAdded : MonoBehaviour, ICollectable
     private InputManager InputManager;
     private Transform character;
     private Camera gameCamera;
+    private Vector3 newCamPos;
 
-    #region Methods
     void Start()
     {
         blockStack = FindObjectOfType<BlockStack>();
@@ -27,14 +27,12 @@ public class OnBoxAdded : MonoBehaviour, ICollectable
     }
     private void RePositionBlock()
     {
-        //Blocks Go Under Input Manager
+        //Blocks Go Under Base Box
         transform.SetParent(character.transform);
         character.localPosition += Vector3.up * 1.1f;
-        print("Block List Count " + blockStack.boxList.Count);
         transform.localPosition = new Vector3(0, ((blockStack.boxList.Count) * -1.1f), 0);
-        Camera.main.fieldOfView += 2.5f;
-        Camera.main.transform.localPosition = new Vector3(Camera.main.transform.localPosition.x, Camera.main.transform.localPosition.y, (Camera.main.transform.localPosition.z - .1f));
+        Camera.main.fieldOfView += 1f;
+        Camera.main.GetComponent<CameraFollow>().offsetZ -= .1f;
         Destroy(this);
     }
-    #endregion
 }

@@ -14,7 +14,6 @@ public class BlockStack : MonoBehaviour
     public void RemoveBoxToStack(GameObject box)
     {
         box.transform.parent = null;
-        box.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         boxList.Remove(box);
     }
 }

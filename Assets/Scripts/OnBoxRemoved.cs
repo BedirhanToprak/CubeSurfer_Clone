@@ -5,6 +5,8 @@ using UnityEngine;
 public class OnBoxRemoved : MonoBehaviour
 {
     private BlockStack blockStack;
+    private Camera gameCamera;
+    private Vector3 newCamPos;
     void Start()
     {
         blockStack = FindObjectOfType<BlockStack>();
@@ -12,15 +14,26 @@ public class OnBoxRemoved : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
+        gameCamera = Camera.main;
+        string tag = collision.transform.tag;
+        if (tag == ("Obstacle") || tag == ("FinalObstacle"))
         {
-            blockStack.RemoveBoxToStack(this.gameObject);
-            Destroy(this);
+            RemoveBox();
         }
-        if (collision.gameObject.CompareTag("GroundObstacle"))
+        else if (tag == ("GroundObstacle"))
         {
-            blockStack.RemoveBoxToStack(this.gameObject);
-            Destroy(this.gameObject);
+            GetComponent<BoxCollider>().isTrigger = true;
+            RemoveBox();
         }
+    }
+    private void RemoveBox()
+    {
+        gameCamera.fieldOfView = gameCamera.fieldOfView > 70 ? gameCamera.fieldOfView -= 1f : 70;
+
+        if (!(gameCamera.transform.localPosition.z <= 11.1))
+            Camera.main.GetComponent<CameraFollow>().offsetZ += .1f;
+        blockStack.RemoveBoxToStack(this.gameObject);
+
+        Destroy(this);
     }
 }
