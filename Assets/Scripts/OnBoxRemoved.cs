@@ -28,6 +28,7 @@ public class OnBoxRemoved : MonoBehaviour
     }
     private void RemoveBox()
     {
+        FindObjectOfType<AudioManager>().Play("BoxLose");
         gameCamera.fieldOfView = gameCamera.fieldOfView > 70 ? gameCamera.fieldOfView -= 1f : 70;
 
         if (!(gameCamera.transform.localPosition.z <= 11.1))

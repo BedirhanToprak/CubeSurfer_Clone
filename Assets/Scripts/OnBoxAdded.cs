@@ -28,6 +28,7 @@ public class OnBoxAdded : MonoBehaviour, ICollectable
     private void RePositionBlock()
     {
         //Blocks Go Under Base Box
+        FindObjectOfType<AudioManager>().Play("BoxGather");
         transform.SetParent(character.transform);
         character.localPosition += Vector3.up * 1.1f;
         transform.localPosition = new Vector3(0, ((blockStack.boxList.Count) * -1.1f), 0);
